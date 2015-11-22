@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Flow Control</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/css/style.css">
+  </head>
+  <body>
+
+    <h1>Flow Control</h1>
+
+  <section id="main">
+    <section>
+    <h2>Description</h2>
+
+    <p>Consider the situation where a <strong>sender</strong> sends data packets to a <strong>receiver</strong>. Our requirement is that all of the packets fed into the sender must be successfully received by the receiver and arranged in the correct order. This is easy assuming the connection between them is perfectly reliable and linear. The sender can send packets sequentially knowing that they will be received. This however is a purely theoretical dream. Real world connections are unreliable and packets may drop along the way for any number of reasons. Our task is to develop a system to guarantee that they are received without flaw.</p>
+
+    </section>
+    <section>
+    <h2>Minimum Solution</h2>
+
+    <p>We will first discuss what is needed to meet the requirement of our problem. Improvements for the sake of efficiency will be discusses later.</p>
+
+    <h3>Acknowledgement Packets</h3>
+
+    <p>A simple solution to our problem could be to only allow the sender to send a single packet at a time. After sending a packet the sender will wait for acknowledgement that the packet was received before sending the next packet.</p>
+
+    <p>These acknowledgements can be done with ACK packets. The Receiver will send one of these ACK's upon the receipt of a packet.</p>
+
+    <h3>Timers</h3>
+
+    <p>If the sent data packet does drop our system will grind to a halt. The receiver will never receive the packet thus will never send the ACK. The sender will never send another packet as it never gets the acknowledgement it is waiting for. To remedy this we introduce timers:</p>
+    <ul>
+      <li> For every packet that is sent an associated timer will be created. </li>
+      <li> When the timer expires its associated packet will be sent again and a new timer started. </li>
+      <li> The timer is destroyed when the ACK is received.</li>
+    </ul>
+    <p>We can think of this as the sender being in the state: <em>Trying to send packet n</em>. The ACK moves it to the next state: <em>Trying to send packet n+1</em>.</p>
+
+    <h3>Sequence Numbers</h3>
+
+    <p>There is a fatal flaw in our current design. What happens if an ACK gets dropped? The sender will never get the ACK so will send the same packet when it's timer expires. The receiver will receive this packet an assume it is the following packet. This will result in duplicated data, which we cannot have. </p>
+
+    <p>To fix this we assign packets numbers sequentially as they are fed into the sender. The receiver maintains a similar sequence to reference received packets against:</p>
+    <ul>
+      <li> The sender and receiver initially synchronise sequence numbers.</li>
+      <li> The receiver will only accept a packet with a sequence number it is expecting.</li>
+      <li> The number of the ACK sent by the receiver specifies the number of the packet next expected by the receiver.</li>
+      <li> An ACK with number <em>n</em> tells the sender that it is currently trying to send the wrong packet and should try send the packet with number <em>n</em> instead.</li>
+    </ul>
+
+    <img class="center" src="/img/flow-control/stop-and-wait.png" width="760">
+
+    <p>We see that in the diagram a sequence length of 2 is used. This is sufficient as the sender and the receiver never go out of sync by more than one packet. As long as consecutive packets are numbered uniquely there should be no issue of mistaken identity.</p>
+
+    </section>
+    <section>
+    <h2>Stop and Wait ARQ</h2>
+
+    <p>At this point we have a fully functional system that solves our problem. This protocol is known as <strong>Stop and Wait ARQ</strong> (automatic repeat-request). To summarise:</p>
+    <ul>
+      <li> The sender sends packets labelled with either a 0 or a 1 to the receiver and begins a timer for this packet. If the timer expires, the packet is sent again and the timer is begun again.</li>
+      <li> The receiver discards the packet if it is not labelled with the expected number, and an ACK with the number that should have been received is sent. </li>
+      <li> If the packet received is labelled with the expected number the receiver accepts the packet, increments the expected number, and then sends an ACK with this number.</li>
+      <li> Upon the receipt of an ACK the sender checks if it is trying to send the wrong packet. If it is (as in normal functionally) it will kill the current timer, start an new one and send the next packet.</li>
+    </ul>
+
+    </section>
+    <section>
+    <h2>Improvements</h2>
+
+    <p>A downside of <em>stop and wait</em> is that the sender must wait around for an ACK before it can send the next packet. The packet rate is limited directly by latency. This is where the concept of <strong>sliding windows</strong> come in:</p>
+    <ul>
+      <li> A <em>window</em> is a fixed length interval of a sequence. </li>
+      <li> We say <em>sliding</em> as we can slide this interval along a sequence.</li>
+    </ul>
+
+    <h3>Sliding Windows</h3>
+
+    <h4>Sender</h4>
+
+    <img class="center" src="/img/flow-control/sender-window.png" width="340">
+
+    <p>The idea here is that rather than the sender having to wait for an ACK after sending every packet, we allow the sender to send a window of packets:</p>
+    <ul>
+      <li> All the packets that fall within the window are sent before the sender stops and waits for an ACK. Multiple timers are now necessary as each packet that is sent begins a timer.</li>
+      <li> The receipt of an ACK with number <em>n</em> results in the start of the window being moved to sequence number <em>n</em>. Any unsent packets that now fall within the window are also sent. The timers of any packets that now fall outside the window are killed.</li>
+    </ul>
+
+    <h4>Receiver</h4>
+
+    <img class="center" src="/img/flow-control/receiver-window.png" width="400">
+
+    <p>Also giving the receiver a window allows it to receive some packets out of order:</p>
+    <ul>
+      <li> If the number of a received packet falls within the window it is accepted and inserted into that position in the window.</li>
+      <li> If the number of a received packet falls outside of the window, the implication is that the sender window and the receiver window have gone out of sync. To resynchronise, the receiver sends an ACK with number <em>n</em>, where <em>n</em> is the start of the receivers window. </li>
+      <li> Any time the start of the window has filled elements, the window is slid up until the start of the window becomes empty. This results in the senders and receivers windows being out of sync. To resolve this, an ACK with number of the new window start is sent.</li>
+    </ul>
+    <p>There is no point in having the receiver window larger than the sender window. The sender is the limiting factor in terms of packets being sent. We will see protocols where the receiver has a smaller window size, and where it has the same window size.</p>
+
+    <h3>Sequence Length</h3>
+
+    <p>Including a sequence number with every packet we send incurs a certain overhead. The bigger the possible sequence number, the bigger the overhead. For this reason let us revisit the question of: What is the minimal range the sequence numbers can have? For Stop and Wait we reasoned that it can have a length of 2. This worked as only one packet was ever on-the-go at a time. This is no longer true.</p>
+
+    <p>An observation we have made is that ACKs are used to synchronise the start of windows. Hence the furthest out of sync the sender and receiver can get is in the following scenario: All of the senders packets get through, and non of the ACKs get through.</p>
+
+    <img class="center" src="/img/flow-control/sequence-length.png" width="360">
+
+    <p>As we can see the two windows span a distance of the sum of their lengths. Consider these as the active sequence numbers, as these are the ones that are actively being sent or waited upon. As long as the active numbers are all unique there should be no issues with number reuse. Therefore at a minimum: </p>
+
+    <p class="center"><em>sequence length = sum of the length of the windows</em></p>
+
+    <h3>Negative-Acknowledgement Packets</h3>
+
+    <p>Our final addition are NAK packets. They have one simple purpose: Tell the sender that I never received the packet with this number, so send it again! The advantage of this is that we do not always have to wait on a packets timer to expire for it to be sent again. There are two kinds of NAKs:</p>
+    <ol>
+      <li> Resend <em>all</em> packets starting from <em>n</em>.</li>
+      <li> Resend <em>just</em> packet <em>n</em>.</li>
+    </ol>
+
+    </section>
+    <section>
+    <h2>Go-Back-N ARQ</h2>
+
+    <img class="center" src="/img/flow-control/go-back-n.png" width="700">
+
+    <p>This is the first of our protocols that uses sliding windows and NAKs:</p>
+    <ul>
+      <li> The sender has any (positive) window size, typically greater than 1.</li>
+      <li> The receiver has a window size of exactly 1.</li>
+      <li> It uses NAK type 1: Resend all packets starting from <em>n</em>.</li>
+      <li> A NAK is sent when a packet is received with an <em>unexpected</em> packet number. The number of the NAK is that of the <em>expected</em> packet number.</li>
+    </ul>
+    <p>If a packet is dropped any following packets will be rejected by the receiver. Hence the need for all packets starting from the missed one to be resent.</p>
+
+    </section>
+    <section>
+    <h2>Selective Repeat ARQ</h2>
+
+    <img class="center" src="/img/flow-control\selective-repeat.png" width="760">
+
+    <p>This is the second of our protocols that uses sliding windows and NAKs:</p>
+    <ul>
+      <li> The receiver has the same window size as the sender.</li>
+      <li> It uses NAK type 2: Resend just packet <em>n</em>.</li>
+      <li> If the packet received is within the receivers window but is not the expected packet, NAK all packets from the expected packet up to the received packet (but not including). Then set the expected packet as one after the received packet.</li>
+        </ul>
+    <p>As the receiver's window can store packets out of order, only the dropped packets need to be resent.</p>
+
+    <h3>Stop and Wait ARQ ‒ Revisited</h3>
+
+    <p>A nice observation to make is that Stop and Wait is just a special case of Selective Repeat, specifically when the window size is just 1. This is nice as it allows us to just implement the more general case rather than both separately.</p>
+
+  </section>
+  </body>
+</html>
