@@ -3,7 +3,7 @@
   <head>
     <title>Flow Control</title>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="/css/style.css">
+    <link type="text/css" rel="stylesheet" href="style.css" media="all">
   </head>
   <body>
 
@@ -49,7 +49,7 @@
       <li> An ACK with number <em>n</em> tells the sender that it is currently trying to send the wrong packet and should try send the packet with number <em>n</em> instead.</li>
     </ul>
 
-    <img class="center" src="/img/flow-control/stop-and-wait.png" width="760">
+    <img class="center" src="graphics/stop-and-wait.png" width="760">
 
     <p>We see that in the diagram a sequence length of 2 is used. This is sufficient as the sender and the receiver never go out of sync by more than one packet. As long as consecutive packets are numbered uniquely there should be no issue of mistaken identity.</p>
 
@@ -69,17 +69,17 @@
     <section>
     <h2>Improvements</h2>
 
+    <h3>Sliding Windows</h3>
+
     <p>A downside of <em>stop and wait</em> is that the sender must wait around for an ACK before it can send the next packet. The packet rate is limited directly by latency. This is where the concept of <strong>sliding windows</strong> come in:</p>
     <ul>
       <li> A <em>window</em> is a fixed length interval of a sequence. </li>
       <li> We say <em>sliding</em> as we can slide this interval along a sequence.</li>
     </ul>
 
-    <h3>Sliding Windows</h3>
-
     <h4>Sender</h4>
 
-    <img class="center" src="/img/flow-control/sender-window.png" width="340">
+    <img class="center" src="graphics/sender-window.png" width="340">
 
     <p>The idea here is that rather than the sender having to wait for an ACK after sending every packet, we allow the sender to send a window of packets:</p>
     <ul>
@@ -89,7 +89,7 @@
 
     <h4>Receiver</h4>
 
-    <img class="center" src="/img/flow-control/receiver-window.png" width="400">
+    <img class="center" src="graphics/receiver-window.png" width="400">
 
     <p>Also giving the receiver a window allows it to receive some packets out of order:</p>
     <ul>
@@ -99,13 +99,13 @@
     </ul>
     <p>There is no point in having the receiver window larger than the sender window. The sender is the limiting factor in terms of packets being sent. We will see protocols where the receiver has a smaller window size, and where it has the same window size.</p>
 
-    <h3>Sequence Length</h3>
+    <h4>Sequence Length</h4>
 
     <p>Including a sequence number with every packet we send incurs a certain overhead. The bigger the possible sequence number, the bigger the overhead. For this reason let us revisit the question of: What is the minimal range the sequence numbers can have? For Stop and Wait we reasoned that it can have a length of 2. This worked as only one packet was ever on-the-go at a time. This is no longer true.</p>
 
     <p>An observation we have made is that ACKs are used to synchronise the start of windows. Hence the furthest out of sync the sender and receiver can get is in the following scenario: All of the senders packets get through, and non of the ACKs get through.</p>
 
-    <img class="center" src="/img/flow-control/sequence-length.png" width="360">
+    <img class="center" src="graphics/sequence-length.png" width="360">
 
     <p>As we can see the two windows span a distance of the sum of their lengths. Consider these as the active sequence numbers, as these are the ones that are actively being sent or waited upon. As long as the active numbers are all unique there should be no issues with number reuse. Therefore at a minimum: </p>
 
@@ -123,7 +123,7 @@
     <section>
     <h2>Go-Back-N ARQ</h2>
 
-    <img class="center" src="/img/flow-control/go-back-n.png" width="700">
+    <img class="center" src="graphics/go-back-n.png" width="700">
 
     <p>This is the first of our protocols that uses sliding windows and NAKs:</p>
     <ul>
@@ -138,7 +138,7 @@
     <section>
     <h2>Selective Repeat ARQ</h2>
 
-    <img class="center" src="/img/flow-control\selective-repeat.png" width="760">
+    <img class="center" src="graphics\selective-repeat.png" width="760">
 
     <p>This is the second of our protocols that uses sliding windows and NAKs:</p>
     <ul>
@@ -153,5 +153,12 @@
     <p>A nice observation to make is that Stop and Wait is just a special case of Selective Repeat, specifically when the window size is just 1. This is nice as it allows us to just implement the more general case rather than both separately.</p>
 
   </section>
+  
+  <footer>
+    <ul>
+      <li><a href="https://github.com/nolanar">github.com/nolanar</a></li>
+      <li><a href="mailto:nolanar@tcd.ie">nolanar@tcd.ie</a></li>
+    </ul>
+  </footer>  
   </body>
 </html>
