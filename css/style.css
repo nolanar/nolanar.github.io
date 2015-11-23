@@ -4,9 +4,33 @@ html {
   font-size: 20px;
 }
 
+header {
+  background-color: #ccc;
+  width: 100%;
+  bottom: 0;
+  position: fixed; 
+}
+
 body {
   margin: 0;
-  background: #eee;
+  background-color: #f4f4f4;
+}
+
+footer {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  bottom: 0;
+}
+footer a {
+  color: #555;
+}
+footer ul {
+  list-style: none;
+}
+
+a {
+  color: #822;
 }
 
 h1 {
@@ -18,7 +42,8 @@ h1 {
 h2 {
   font-size: 2em;
   font-weight: normal;
-  margin-bottom: 1;
+  margin-top: 45px;
+  margin-bottom: 0;
 }
 
 img.center {
@@ -26,9 +51,16 @@ img.center {
   margin-left: auto;
   margin-right: auto;
 }
-
 p.center {
   text-align: center;
+}
+
+.topic,
+.topic ul {
+  list-style: none;
+}
+.topic li {
+  margin-bottom: 15px; 
 }
 
 #main {
