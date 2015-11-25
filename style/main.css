@@ -1,0 +1,108 @@
+html {
+  height: 100%;
+  margin: 0;
+  font-size: 16px;
+  font-family: sans-serif;
+  color: #444;
+}
+
+body {
+  margin: 0;
+}
+
+/* footer */
+
+footer {
+  width: 100%;
+  text-align: center;
+}
+footer a {
+  color: #666;
+}
+footer ul {
+  list-style: none;
+}
+
+hr {
+  width: 800px;
+}
+
+/* links */
+
+a {
+  color: #737;
+  text-decoration: none;
+}
+a:hover {
+  color: #a5a;
+}
+
+/* headers */
+
+h1 {
+  font-size: 3.25em;
+  font-weight: normal;
+  text-align: center;
+  margin-top: 0;
+}
+
+h2 {
+  font-size: 2em;
+  font-weight: normal;
+}
+
+/* centering */
+
+img.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+p.center {
+  text-align: center;
+}
+
+/* topic */
+
+.topic {
+
+}
+.topic ul {
+  list-style: none;
+}
+.topic li:before {
+  content: "\27A4";
+  margin: 0 0.5em 0 0;
+}
+
+.subtopic {
+
+}
+.subtopic h3 {
+  font-size: 1.25em;
+}
+.subtopic h3:before {
+  content: "\BB"; 
+  margin: 0 0.5em 0 0;
+  font-size: 1.2em;
+}
+
+/* main section */
+
+#main {
+  margin: 0 auto;
+  max-width: 800px;
+}
+
+/* logo */
+
+#home {
+  display: block;
+  margin: 5px 0px 0px 6px;
+  width: 48px;
+  height: 48px;
+  background: url('/img/home.png') 0 0;
+ }
+#home:hover {
+  background: url('/img/home.png') 0 -48px;
+}

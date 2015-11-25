@@ -3,33 +3,82 @@
 <head>
   <meta charset="utf-8">
   <title>Aran Nolan - homepage</title>
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="/style/main.css">
 </head>
 <body>
   <header>
-    <a href="/index.html">
-      <img src="/img/home.png" alt="home" width="48px" id="home-icon">
-    </a>
+    <a href="/" id="home"></a>
   </header>
   <h1>Aran Nolan</h1>
   <section id="main">
-    <p>A place to highlight some of my work.</p>
+    <p>I am currently the second year of my Computer Science degree. My interests include music, maths, an of course all things computer science! My background in maths gives me strong analytical and problem solving skills. This translates well into any project I undertake. A selection of these are highlighted below.</p>
 
     <section class="topic">
       <h2>Java</h2>
-      <p>The language primarily used in my degree to this point.</p>
-      <ul>
-        <li><a href="https://github.com/nolanar/telecommunication-flow-control">Telecommunication - Flow Control</a></h3></li>
-        <li><a href="https://github.com/cal2195/programming-project-group-3">Taxi Data Visualisation - Group Project</a></li>
-      </ul>
+      <p>This is the the language I am most confident using. It is the language primarily used In my course.</p>
+
+      <section class="subtopic">
+        <h3>Telecommunication - Flow Control</h3>
+        <ul>
+          <li><a href="https://github.com/nolanar/telecommunication-flow-control">Source code with implementation description [GitHub]</a></li>
+          <li><a href="/articles/flow-control.html">Article containing my analysis of the underlying theory</a></li>
+        </ul>
+        <p>This would have to be the project I am most happy with to date. The window classes that handle the flow control were designed with modularity in mind. This has allowed them to be easily integrated into other projects.</p>
+        <p>
+        </p>
+      </section>
+
+      <section class="subtopic">
+        <h3>Taxi Data Visualisation</h3>
+        <ul>
+          <li><a href="https://github.com/cal2195/programming-project-group-3">Source code [GitHub]</a></li>
+        </ul>
+        <p>This project was undertaken as part of a group. We were asked to generate a tool to visualise New York taxi data. </p>
+        <p>A local SQL server with over 2GB of data was used. As it is hardly practical host all this data, I put together this demo video in it's place:</p>
+
+        <iframe width="640" height="360" src="https://www.youtube.com/embed/Mt1zhSn4svk" frameborder="0" allowfullscreen></iframe>
+      </section>
+
     </section>
 
     <section class="topic">
       <h2>C</h2>
       <p>The low level language of study for this year of my degree.</p>
-      <ul>
-        <li><a href="https://github.com/nolanar/cs2014-systems-programming">Systems Programming - Assignments</a></h3></li>
-      </ul>
+      <section class="subtopic">
+        <h3>Systems Programming Assignments</h3>
+        <ul>
+          <li><a href="https://github.com/nolanar/cs2014-systems-programming">Source code [GitHub]</a></li>
+        </ul>
+        <p>I always make an effort to learn something new from every assignment. For example I experimented with void pointers and metaprogramming to create a generic stack implementation in this <a href="https://github.com/nolanar/cs2014-systems-programming/tree/master/lab4-calculator">calculator assignment</a>. An attempt was made to encapsulate any implementation details away from the user of a stack.</p>
+      </section>
+    </section>
+
+    <section class="topic">
+      <h2>ARM Assembly</h2>
+      <p>This was the low level language of study for the first year of my degree. I really enjoyed the control you had working at this low level, despite how tedious it was to program even the most basic of things.</p>
+      <section class="subtopic">
+        <h3>Gausian Blur Image Effect</h3>
+        <ul>
+          <li><a href="https://github.com/nolanar/gaussian-blur">Source code with brief description [GitHub]</a></li>
+          <li><a href="/documents/gaussian-blur.pdf">Report containing a detailed description of the project [PDF]</a></li>
+        </ul>
+        <p>This project in particular demonstrates my strength in maths with an ability to use it practically. The report is quite maths heavy, due to the nature I what I was trying to acomplish.</p>
+      </section>
+    </section>
+
+    <section class="topic">
+      <h2>Python</h2>
+      <p>This is a language I enjoy programming in when I find some free time.</p>
+
+      <section class="subtopic">
+        <h3>DailyProgrammer</h3>
+        <ul>
+          <li><a href="https://github.com/nolanar/dailyprog-python3">Source code [GitHub]</a></li>
+        </ul>
+        <p>The subreddit <a href="https://www.reddit.com/r/dailyprogrammer">/r/dailyprogrammer</a> offeres a selection of challenge problems. These are a collection I have attempted.</p>
+        <p>I found <a href="https://github.com/nolanar/dailyprog-python3/tree/master/intermediate/233-TextLife">challenge 233 [intermediate]</a>, a text based <a href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life">Game of Life</a>, to be particularly interesting and hope to develop it further.</p>
+      </section>
+
     </section>
 
   </section>
