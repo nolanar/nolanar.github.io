@@ -74,14 +74,10 @@ p.center {
   content: "\27A4";
   margin: 0 0.5em 0 0;
 }
-
-.subtopic {
-
-}
-.subtopic h3 {
+.topic h3 {
   font-size: 1.25em;
 }
-.subtopic h3:before {
+.topic h3:before {
   content: "\BB"; 
   margin: 0 0.5em 0 0;
   font-size: 1.2em;
