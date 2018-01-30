@@ -51,6 +51,15 @@ h2 {
   font-weight: normal;
 }
 
+h2.subheader {
+  font-size: 1.25em;
+  font-weight: normal;
+  text-align: center;
+  margin-top: -1em;
+  margin-bottom: 2.5em;
+  color: grey
+}
+
 /* centering */
 
 img.center {
@@ -65,7 +74,7 @@ p.center {
 /* topic */
 
 .topic {
-
+  margin-bottom: 3em
 }
 .topic ul {
   list-style: none;
@@ -76,10 +85,12 @@ p.center {
 }
 .topic h3 {
   font-size: 1.25em;
+  margin-top: 1.5em;
 }
+
 .topic h3:before {
-  content: "\BB"; 
-  margin: 0 0.5em 0 0;
+  /*content: "\BB"; */
+  /*margin: 0 0.5em 0 0;*/
   font-size: 1.2em;
 }
 
